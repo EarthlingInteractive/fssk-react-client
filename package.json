@@ -1,11 +1,11 @@
 {
-  "name": "fssk-node-client",
+  "name": "fssk-react-client",
   "version": "0.1.0",
   "private": true,
   "engines": {
     "node": ">= 8.9.4"
   },
-  "proxy": "http://fssk-node-server:4000",
+  "proxy": "http://api-application:4000",
   "homepage": "/client",
   "scripts": {
     "prestart": "npm install",
