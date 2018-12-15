@@ -12,6 +12,7 @@ export class AuthStore {
 	@observable public name: string = "";
 	@observable public password: string = "";
 	@observable public confirmPassword: string = "";
+	@observable public resetToken: string = "";
 
 	@observable public emailError: string = "";
 	@observable public nameError: string = "";
@@ -25,7 +26,7 @@ export class AuthStore {
 	[key: string]: any;
 
 	private errorFields = ["emailError", "nameError", "passwordError", "confirmPasswordError"];
-	private dataFields = ["email", "name", "password", "confirmPassword"];
+	private dataFields = ["email", "name", "password", "confirmPassword", "resetToken"];
 
 	@action.bound public updateField(field: string, val: string) {
 		switch (field) {
@@ -43,6 +44,10 @@ export class AuthStore {
 
 			case "confirmPassword":
 				this.confirmPassword = val;
+				break;
+
+			case "resetToken":
+				this.resetToken = val;
 				break;
 
 			default:
@@ -115,11 +120,97 @@ export class AuthStore {
 		return results;
 	}
 
+	public validatePasswordReset(password: string, confirmPassword: string) {
+		const results: any = {
+			passwordError: "",
+			confirmPasswordError: "",
+			allValid: true,
+		};
+
+		const missingRequired = checkRequiredFields(
+			["password", "confirmPassword"],
+			{password, confirmPassword },
+		);
+
+		if (missingRequired.length > 0) {
+			missingRequired.forEach((key: string) => {
+				results[`${key}Error`] = "Required Field";
+			});
+			results.allValid = false;
+		}
+
+		if (!results.passwordError && !validator.isLength(password, {min: 10, max: 100})) {
+			results.passwordError = "Password must be at least 10 characters";
+			results.allValid = false;
+		}
+
+		if (!results.confirmPasswordError && (password !== confirmPassword)) {
+			results.confirmPasswordError = "Passwords do not match";
+			results.allValid = false;
+		}
+
+		return results;
+	}
+
+	@action.bound public async resetPassword() {
+		if (!this.isPasswordResetValid()) { return false; }
+		const { password, email, resetToken } = this;
+		try {
+			await fetchUtil("/api/reset-password", {
+				body: {
+					password, email, resetToken
+				},
+				method: "POST",
+			});
+			return true;
+		} catch (error) {
+			this.handleError(error);
+			return false;
+		}
+	}
+
+	@action.bound public async verifyResetToken(token:string) {
+		try {
+			const response = await fetchUtil(`/api/reset-password/validate-token/${token}`, {
+				method: "GET",
+			});
+			if (response && response.isValid && response.user) {
+				// We update our vars (name, email) from the user data
+				// We cannot just assign the this.user to the response user because that
+				// would count as being 'logged in'
+				this.updateVarsFromUser(response.user);
+				this.updateField('resetToken', token);
+				return true;
+			}
+			return false;
+		} catch (error) {
+			this.handleError(error);
+			return false;
+		}
+	}
+
+	@action.bound public async forgotPassword() {
+		if (!this.isEmailValid()) { return false; }
+		const { email } = this;
+		try {
+			await fetchUtil("/api/forgot-password", {
+				body: {
+					email,
+				},
+				method: "POST",
+			});
+			this.clearAll();
+			return true;
+		} catch (error) {
+			this.handleError(error);
+			return false;
+		}
+	}
+
 	@action.bound public async login() {
 		if (!this.isLoginValid()) { return false; }
 
 		const {email, password} = this;
-
 		try {
 			const response = await fetchUtil("/api/auth", {
 				body: {
@@ -133,14 +224,41 @@ export class AuthStore {
 			this.clearAll();
 
 			// save the user info
-			this.updateUser(response.user);
+			if (response.user) {
+				this.updateUser(response.user);
+			}
 
 			return true;
-
 		} catch (error) {
 			this.handleError(error);
 			return false;
 		}
+	}
+
+	public validateEmail(email: string) {
+		const results: any = {
+			emailError: "",
+			allValid: true,
+		}
+
+		const missingRequired = checkRequiredFields(
+			["email"],
+			{ email },
+		);
+
+		if (missingRequired.length > 0) {
+			missingRequired.forEach((key: string) => {
+				results[`${key}Error`] = "Required Field";
+			});
+			results.allValid = false;
+		}
+
+		if (!results.emailError && !validator.isEmail(email)) {
+			results.emailError = "Invalid Email Format";
+			results.allValid = false;
+		}
+
+		return results;
 	}
 
 	public validateLogin(email: string, password: string) {
@@ -181,6 +299,9 @@ export class AuthStore {
 			if (error.json && error.json.message === "email is not unique") {
 				this.emailError = "A user already exists with this email";
 			}
+			if (error.json && error.json.message === "User does not exist") {
+				this.emailError = "No account matches the email address";
+			}
 		}
 	}
 
@@ -209,6 +330,11 @@ export class AuthStore {
 		}
 	}
 
+	@action.bound public updateVarsFromUser(user: any) {
+		this.name = user.name;
+		this.email = user.email;
+	}
+
 	@action.bound public updateUser(user: any, isClearing = false) {
 		this.user = user;
 		this.hasLoadedSession = !isClearing;
@@ -226,6 +352,21 @@ export class AuthStore {
 		this.passwordError = validation.passwordError;
 		this.confirmPasswordError = validation.confirmPasswordError;
 
+		return validation.allValid;
+	}
+
+	private isPasswordResetValid() {
+		const validation: any = this.validatePasswordReset(this.password, this.confirmPassword);
+
+		this.passwordError = validation.passwordError;
+		this.confirmPasswordError = validation.confirmPasswordError;
+
+		return validation.allValid;
+	}
+
+	private isEmailValid() {
+		const validation: any = this.validateEmail(this.email);
+		this.emailError = validation.emailError;
 		return validation.allValid;
 	}
 

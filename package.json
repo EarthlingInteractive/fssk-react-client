@@ -1,5 +1,5 @@
 {
-  "name": "fssk-react-client",
+  "name": "fssk-node-client",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -12,7 +12,7 @@
     "start": "react-scripts start",
     "prebuild": "npm install",
     "build": "react-scripts build",
-    "test": "react-scripts test  --env=jsdom --watchAll",
+    "test": "react-scripts test --env=jsdom --watchAll",
     "test:ci": "CI=true react-scripts test --env=jsdom --reporters=default --reporters=jest-junit --coverage",
     "eject": "react-scripts eject",
     "lint": "tslint src/**/*.ts{,x}",
@@ -48,7 +48,7 @@
     "@types/react-router-dom": "4.3.0",
     "@types/react-test-renderer": "16.0.1",
     "@types/validator": "9.4.1",
-    "enzyme": "3.7.0",
+    "enzyme": "3.8.0",
     "enzyme-adapter-react-16": "1.6.0",
     "fetch-mock": "6.5.2",
     "jest-enzyme": "7.0.0",

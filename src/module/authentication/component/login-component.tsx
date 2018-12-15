@@ -3,7 +3,6 @@ import * as React from "react";
 import {Link} from "react-router-dom";
 import FormInput from "../../common/component/form-input-component";
 
-
 const logo = require("../../../img/logo.png"); // tslint:disable-line
 
 interface ILoginComponentProps {
@@ -81,9 +80,8 @@ export default class LoginComponent extends React.Component<ILoginComponentProps
 						<input type="submit" value="Log In" className="dsk-Admin-form__submit btn btn-primary" />
 					</form>
 					<p className="dsk-Admin-form__text a-text-align-center">
-						Forget your password?&nbsp;
-						<Link to="/password-reset" className="dsk-Admin-form__textlink">
-							Reset your password here.
+						<Link to="/forgot-password" className="dsk-Admin-form__textlink">
+							I forgot my password.
 						</Link>
 					</p>
 					<p className="dsk-Admin-form__text a-text-align-center">
