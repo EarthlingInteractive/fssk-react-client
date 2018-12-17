@@ -7,16 +7,16 @@ import autobind from "autobind-decorator";
 
 @observer
 export default class ForgotPasswordContainer extends React.Component<any> {
-	@observable public successfulForgot:boolean = false;
+	@observable public successfulForgot: boolean = false;
 
 	@autobind
-	@action checkForgotPasswordSuccess(success : any) {
+	@action public checkForgotPasswordSuccess(success: any) {
 		if (!success) { return; }
 		this.successfulForgot = true;
-	};
+	}
 
 	@autobind
-	submit() {
+	public submit() {
 		const {
 			forgotPassword,
 		} = AuthStore;

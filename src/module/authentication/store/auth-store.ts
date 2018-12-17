@@ -158,7 +158,7 @@ export class AuthStore {
 		try {
 			await fetchUtil("/api/reset-password", {
 				body: {
-					password, email, resetToken
+					password, email, resetToken,
 				},
 				method: "POST",
 			});
@@ -169,7 +169,7 @@ export class AuthStore {
 		}
 	}
 
-	@action.bound public async verifyResetToken(token:string) {
+	@action.bound public async verifyResetToken(token: string) {
 		try {
 			const response = await fetchUtil(`/api/reset-password/validate-token/${token}`, {
 				method: "GET",
@@ -179,7 +179,7 @@ export class AuthStore {
 				// We cannot just assign the this.user to the response user because that
 				// would count as being 'logged in'
 				this.updateVarsFromUser(response.user);
-				this.updateField('resetToken', token);
+				this.updateField("resetToken", token);
 				return true;
 			}
 			return false;
@@ -239,7 +239,7 @@ export class AuthStore {
 		const results: any = {
 			emailError: "",
 			allValid: true,
-		}
+		};
 
 		const missingRequired = checkRequiredFields(
 			["email"],

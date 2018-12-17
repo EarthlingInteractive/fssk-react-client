@@ -8,7 +8,7 @@ interface IForgotPasswordProps {
 	emailError ?: string;
 	successfulForgot ?: boolean;
 	submit: () => void;
-	updateField: (field : string, val: string) => void;
+	updateField: (field: string, val: string) => void;
 }
 
 @observer
@@ -18,7 +18,7 @@ export default class ForgotPasswordComponent extends React.Component<IForgotPass
 		this.onSubmit = this.onSubmit.bind(this);
 	}
 
-	onSubmit(e : any) {
+	public onSubmit(e: any) {
 		e.preventDefault();
 		this.props.submit();
 	}
@@ -52,7 +52,7 @@ export default class ForgotPasswordComponent extends React.Component<IForgotPass
 					type="submit"
 					value="Reset Password"
 					className="dsk-Admin-form__submit btn btn-primary"
-					disabled={email == ''}
+					disabled={email === ""}
 				/>
 			</form>
 		);
@@ -62,7 +62,8 @@ export default class ForgotPasswordComponent extends React.Component<IForgotPass
 		return (
 			<div className="justify-content-center">
 				<p className="dsk-Admin-form__text a-text-align-center">
-					We found an account that matches, you should receive an email with instructions on how to reset your password shortly.
+					We found an account that matches, you should receive an email with instructions
+					on how to reset your password shortly.
 				</p>
 				<Link to="/login" className="dsk-Admin-form__submit btn btn-primary">
 					Return to Login
@@ -79,14 +80,9 @@ export default class ForgotPasswordComponent extends React.Component<IForgotPass
 			marginTop: "20px",
 		};
 
-		let forgotPasswordElement;
 		// If the submission process for the forgot password is a success, then display a message
-		if (successfulForgot) {
-			forgotPasswordElement = this.renderSuccessMessage();
-		} else {
-			// Render the forgot password form
-			forgotPasswordElement = this.renderForm();
-		}
+		// otherwise display the form
+		const forgotPasswordElement = successfulForgot ? this.renderSuccessMessage() : this.renderForm();
 
 		return (
 			<div className="dsk-Admin-form forgot-password container d-flex justify-content-center">
@@ -97,6 +93,6 @@ export default class ForgotPasswordComponent extends React.Component<IForgotPass
 					{forgotPasswordElement}
 				</div>
 			</div>
-		)
+		);
 	}
 }

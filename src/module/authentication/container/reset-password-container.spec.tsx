@@ -1,17 +1,15 @@
 import * as React from "react";
 import * as Enzyme from "enzyme";
 import { BrowserRouter as Router } from "react-router-dom";
-import { mountWrap } from '../../../util/contextWrapper';
+import { mountWrap } from "../../../util/contextWrapper";
 import ResetPasswordContainer from "../container/reset-password-container";
 import * as fetchUtils from "../../../util/fetch-util";
 import waitForExpect from "wait-for-expect";
-import { createWaitForElement } from 'enzyme-wait';
-
-const fetchMock = require('fetch-mock');
+import fetchMock from "fetch-mock";
 
 const validData = {
-	name: 'Doctor Test',
-	email: 'drtest@test.com',
+	name: "Doctor Test",
+	email: "drtest@test.com",
 	password: "passPASSpass",
 	confirmPassword: "passPASSpass",
 };
@@ -72,15 +70,15 @@ async function waitForTokenValidation(wrapper, locateForm = true) {
 	if (locateForm) {
 		// Wait for the form
 		await waitForExpect(() => {
-			const form = wrapper.update().find('form');
+			const form = wrapper.update().find("form");
 			expect(form).toHaveLength(1);
 		});
 
 		// Check that the form has the name and email from our valid token validation
-		const nameText = wrapper.find('dd.userName');
+		const nameText = wrapper.find("dd.userName");
 		expect(nameText).toHaveLength(1);
 
-		const emailText = wrapper.find('dd.userEmail');
+		const emailText = wrapper.find("dd.userEmail");
 		expect(emailText).toHaveLength(1);
 
 		return waitForExpect(() => {
@@ -102,7 +100,7 @@ describe("ResetPasswordContainer", () => {
 
 	describe ("when filling out forgot password form", () => {
 		let wrapper;
-		let props;
+		const props = {};
 		const wrappedMount = (route) => mountWrap(<ResetPasswordContainer {...props} />, route);
 
 		describe("with an invalid token", () => {
@@ -111,12 +109,12 @@ describe("ResetPasswordContainer", () => {
 				fetchMock.mock("/api/reset-password/validate-token/5555-5555", {
 					statusCode: 500,
 					headers: new Headers({"Content-Type":  "application/json"}),
-					body: {"code":500,"message":"Reset Token was already used","error":{}},
+					body: {code: 500, message: "Reset Token was already used", error: {}},
 				}, { method: "get"});
 
 				wrapper = wrappedMount({
 					location: {},
-					match: {params: {token: '5555-5555'}},
+					match: {params: {token: "5555-5555"}},
 				});
 			});
 
@@ -135,7 +133,7 @@ describe("ResetPasswordContainer", () => {
 
 				// Expect the page to change to inform the user they have an invalid token
 				await waitForExpect(() => {
-					const errorText = wrapper.update().find('div.reset-password-invalid');
+					const errorText = wrapper.update().find("div.reset-password-invalid");
 					expect(errorText).toHaveLength(1);
 					expect(errorText.text()).toBe("Your token is invalid or has expired. Please reset your password again.");
 				});
@@ -147,13 +145,13 @@ describe("ResetPasswordContainer", () => {
 				// Mock the reset password's validate token response
 				fetchMock.mock("/api/reset-password/validate-token/5555-5555", {
 					isValid: true,
-					token: {tokenhash: '5555-5555', completed: false, expires_at: '2030-12-26T00:00:00.000Z'},
+					token: {tokenhash: "5555-5555", completed: false, expires_at: "2030-12-26T00:00:00.000Z"},
 					user: {name: validData.name, email: validData.email},
 				}, { method: "get"});
 
 				wrapper = wrappedMount({
 					location: {},
-					match: {params: {token: '5555-5555'}},
+					match: {params: {token: "5555-5555"}},
 				});
 			});
 
@@ -194,7 +192,7 @@ describe("ResetPasswordContainer", () => {
 					body: {
 						email: validData.email,
 						password: validData.password,
-						resetToken: '5555-5555',
+						resetToken: "5555-5555",
 					},
 					method: "POST",
 				});
@@ -210,14 +208,14 @@ describe("ResetPasswordContainer", () => {
 				fetchMock.mock("/api/reset-password", {
 					status: 200,
 					body: {
-						user: {id: 1234, email: validData.email}
-					}
+						user: {id: 1234, email: validData.email},
+					},
 				}, { method: "post"})
 				.mock("/api/auth", {
 					status: 200,
 					body: {
-						user: {id: 1234, email: validData.email, name: 'Mister Loggedin'}
-					}
+						user: {id: 1234, email: validData.email, name: "Mister Loggedin"},
+					},
 				}, { method: "post"});
 
 				// Get instance of reset password container

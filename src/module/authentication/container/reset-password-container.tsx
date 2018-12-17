@@ -9,27 +9,27 @@ import ResetPasswordComponentSuccess from "../component/reset-password-component
 
 @observer
 class ResetPasswordContainer extends React.Component<any> {
-	@observable hasValidToken:boolean = false;
-	@observable resetSuccessful:boolean = false;
-	@observable isLoading:boolean = false;
+	@observable public hasValidToken: boolean = false;
+	@observable public resetSuccessful: boolean = false;
+	@observable public isLoading: boolean = false;
 
-	@action changeIsLoading(loadingStatus:boolean) {
+	@action public changeIsLoading(loadingStatus: boolean) {
 		this.isLoading = loadingStatus;
 	}
 
 	@autobind
-	@action checkVerifyResetToken(results: any) {
+	@action public checkVerifyResetToken(results: any) {
 		this.hasValidToken = results;
 		this.changeIsLoading(false);
 	}
 
 	@autobind
-	@action checkLoginSuccess(loginSuccess: boolean) {
+	@action public checkLoginSuccess(loginSuccess: boolean) {
 		this.resetSuccessful = loginSuccess;
 	}
 
 	@autobind
-	@action checkResetPasswordSuccess(resetSuccess: any) {
+	@action public checkResetPasswordSuccess(resetSuccess: any) {
 		const { login } = AuthStore;
 		if (resetSuccess) {
 			login().then(this.checkLoginSuccess);
@@ -37,7 +37,7 @@ class ResetPasswordContainer extends React.Component<any> {
 	}
 
 	@autobind
-	submit() {
+	public submit() {
 		const {
 			resetPassword,
 		} = AuthStore;
@@ -45,7 +45,7 @@ class ResetPasswordContainer extends React.Component<any> {
 		resetPassword().then(this.checkResetPasswordSuccess);
 	}
 
-	componentDidMount() {
+	public componentDidMount() {
 		const { verifyResetToken } = AuthStore;
 		const {match: { params }} = this.props;
 
@@ -57,7 +57,7 @@ class ResetPasswordContainer extends React.Component<any> {
 
 	public render() {
 		const {match: { params }} = this.props;
-		const token = (params && params.token) ? params.token : '';
+		const token = (params && params.token) ? params.token : "";
 
 		const {
 			email,
@@ -81,7 +81,7 @@ class ResetPasswordContainer extends React.Component<any> {
 			validToken: this.hasValidToken,
 			confirmPasswordError,
 			isLoading: this.isLoading,
-		}
+		};
 
 		if (this.resetSuccessful) {
 			return (<ResetPasswordComponentSuccess {...props} />);

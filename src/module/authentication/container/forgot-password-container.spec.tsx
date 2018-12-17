@@ -7,7 +7,7 @@ import fetchMock from "fetch-mock";
 import waitForExpect from "wait-for-expect";
 
 const validData = {
-	email: "test@test.com"
+	email: "test@test.com",
 };
 
 function fillOutForgotForm(wrapper) {
@@ -59,8 +59,9 @@ describe("ForgotPasswordContainer", () => {
 
 	describe ("when filling out forgot password form", () => {
 		let wrapper;
-		let successMessage = "We found an account that matches, you should receive an email with instructions on how to reset your password shortly.";
-		let notFoundMessage = "No account matches the email address";
+		const successMessage = "We found an account that matches, you should receive an email with \
+		instructions on how to reset your password shortly.";
+		const notFoundMessage = "No account matches the email address";
 
 		beforeEach(() => {
 			wrapper = Enzyme.mount(<Router><ForgotPasswordContainer/></Router>);
@@ -93,7 +94,7 @@ describe("ForgotPasswordContainer", () => {
 		});
 
 		it ("should have the submit button be disabled without an email", () => {
-			const submitButton = wrapper.find('input.dsk-Admin-form__submit');
+			const submitButton = wrapper.find("input.dsk-Admin-form__submit");
 			expect(submitButton).toHaveLength(1);
 			expect(submitButton.prop("disabled")).toBe(true);
 		});
@@ -118,7 +119,7 @@ describe("ForgotPasswordContainer", () => {
 			expect(fetchSpy).toHaveBeenCalledTimes(1);
 
 			// Expect the page to change to inform them they started the reset password process
-			const formText = wrapper.find('p.dsk-Admin-form__text');
+			const formText = wrapper.find("p.dsk-Admin-form__text");
 			expect(formText).toHaveLength(1);
 
 			waitForExpect(() => {
@@ -134,7 +135,7 @@ describe("ForgotPasswordContainer", () => {
 				status: 500,
 				statusCode: 500,
 				headers: new Headers({"Content-Type":  "application/json"}),
-				body: {"code":500,"message":"User does not exist","error":{}},
+				body: {code: 500, message: "User does not exist", error: {}},
 			}, { method: "post"});
 
 			const fetchSpy = spyOn(fetchUtils, "default").and.returnValue(Promise.resolve({ status: 200 }));
@@ -146,12 +147,12 @@ describe("ForgotPasswordContainer", () => {
 			expect(fetchSpy).toHaveBeenCalledTimes(1);
 
 			// Expect the page to change to inform them they started the reset password process
-			const errorText = wrapper.find('div.dsk-Admin-form__error');
+			const errorText = wrapper.find("div.dsk-Admin-form__error");
 			expect(errorText).toHaveLength(1);
 
 			waitForExpect(() => {
 				expect(errorText.text()).toBe(notFoundMessage);
 			});
-		})
+		});
 	});
 });

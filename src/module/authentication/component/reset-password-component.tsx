@@ -53,7 +53,9 @@ export default class ResetPasswordComponent extends React.Component<IResetPasswo
 
 	public renderInvalidToken() {
 		return (
-			<div className="reset-password-invalid">Your token is invalid or has expired. Please <a href="/forgot-password">reset your password</a> again.</div>
+			<div className="reset-password-invalid">
+				Your token is invalid or has expired. Please <a href="/forgot-password">reset your password</a> again.
+			</div>
 		);
 	}
 
@@ -100,7 +102,7 @@ export default class ResetPasswordComponent extends React.Component<IResetPasswo
 							type="submit"
 							value="Set Password"
 							className="dsk-Admin-form__submit btn btn-primary"
-							disabled={password == '' || confirmPassword == ''}
+							disabled={password === "" || confirmPassword === ""}
 						/>
 					</form>
 				</div>

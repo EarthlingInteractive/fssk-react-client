@@ -7,7 +7,7 @@ const validData = {
 	name: "tester",
 	password: "passPASSpass",
 	confirmPassword: "passPASSpass",
-	resetToken: '5555-5555'
+	resetToken: "5555-5555",
 };
 
 function setValidForgotData(authStore: AuthStore) {
@@ -90,7 +90,7 @@ describe("AuthStore", () => {
 
 			expect(validation.allValid).toBeTruthy();
 		});
-	})
+	});
 
 	describe("registration validation", () => {
 		const authStore = new AuthStore();
