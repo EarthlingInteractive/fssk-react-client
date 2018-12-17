@@ -1,12 +1,11 @@
-// import { BrowserRouter } from 'react-router-dom';
 import * as Enzyme from "enzyme";
 import { shape } from 'prop-types';
 import { createBrowserHistory as createHistory } from "history";
 
-// Instantiate router context
+// Instantiate router context with no history
 const router = (route:any) => {
   return {
-    history: createHistory({}), //new BrowserRouter().history,
+    history: createHistory({}),
     route,
   }
 };
@@ -18,6 +17,8 @@ const createContext = (givenRoute:any) => {
   }
 };
 
+// Create an enzyme mount with our given reactcontainer, and
+// create a context based off of the route
 export function mountWrap(node:any, route:any) {
   return Enzyme.mount(node, createContext(route));
 }

@@ -53,7 +53,7 @@ export default class ResetPasswordComponent extends React.Component<IResetPasswo
 
 	public renderInvalidToken() {
 		return (
-			<div>Your token is invalid or has expired. Please <a href="/forgot-password">reset your password</a> again.</div>
+			<div className="reset-password-invalid">Your token is invalid or has expired. Please <a href="/forgot-password">reset your password</a> again.</div>
 		);
 	}
 

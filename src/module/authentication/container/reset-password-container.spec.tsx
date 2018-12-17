@@ -58,31 +58,36 @@ function submitResetPasswordForm(wrapper) {
 	return wrapperContainer.instance().submit();
 }
 
-async function waitForTokenValidation(wrapper) {
+async function waitForTokenValidation(wrapper, locateForm = true) {
 	// Get instance of reset password container and force it to reset
 	const resetPasswordContainerInstance = wrapper.find("ResetPasswordContainer").instance();
 	resetPasswordContainerInstance.forceUpdate();
 
-	// Expect that the token validation api was called
-	expect(fetchMock.called("/api/reset-password/validate-token/5555-5555")).toBe(true);
-
-	// Find the form
+	// Wait and expect that the token validation api was called
 	await waitForExpect(() => {
-		const form = wrapper.update().find('form');
-		expect(form).toHaveLength(1);
+		expect(fetchMock.called("/api/reset-password/validate-token/5555-5555")).toBe(true);
 	});
 
-	// Check that the form has the name and email from our token validation
-	const nameText = wrapper.find('dd.userName');
-	expect(nameText).toHaveLength(1);
+	// If we're told to wait for the reset form to show up
+	if (locateForm) {
+		// Wait for the form
+		await waitForExpect(() => {
+			const form = wrapper.update().find('form');
+			expect(form).toHaveLength(1);
+		});
 
-	const emailText = wrapper.find('dd.userEmail');
-	expect(emailText).toHaveLength(1);
+		// Check that the form has the name and email from our valid token validation
+		const nameText = wrapper.find('dd.userName');
+		expect(nameText).toHaveLength(1);
 
-	return waitForExpect(() => {
-		expect(nameText.text()).toBe(validData.name);
-		expect(emailText.text()).toBe(validData.email);
-	});
+		const emailText = wrapper.find('dd.userEmail');
+		expect(emailText).toHaveLength(1);
+
+		return waitForExpect(() => {
+			expect(nameText.text()).toBe(validData.name);
+			expect(emailText.text()).toBe(validData.email);
+		});
+	}
 }
 
 describe("ResetPasswordContainer", () => {
@@ -100,9 +105,46 @@ describe("ResetPasswordContainer", () => {
 		let props;
 		const wrappedMount = (route) => mountWrap(<ResetPasswordContainer {...props} />, route);
 
+		describe("with an invalid token", () => {
+			beforeEach(() => {
+				// Mock the failed token validation response
+				fetchMock.mock("/api/reset-password/validate-token/5555-5555", {
+					statusCode: 500,
+					headers: new Headers({"Content-Type":  "application/json"}),
+					body: {"code":500,"message":"Reset Token was already used","error":{}},
+				}, { method: "get"});
+
+				wrapper = wrappedMount({
+					location: {},
+					match: {params: {token: '5555-5555'}},
+				});
+			});
+
+			afterEach(() => {
+				fetchMock.restore();
+				jest.restoreAllMocks();
+			});
+
+			it ("attempts to validate the token", async () => {
+				// Check for token validation - but don't bother looking for a form
+				await waitForTokenValidation(wrapper, false);
+
+				// Force the container to update itself
+				const resetPasswordContainerInstance = wrapper.find("ResetPasswordContainer").instance();
+				resetPasswordContainerInstance.forceUpdate();
+
+				// Expect the page to change to inform the user they have an invalid token
+				await waitForExpect(() => {
+					const errorText = wrapper.update().find('div.reset-password-invalid');
+					expect(errorText).toHaveLength(1);
+					expect(errorText.text()).toBe("Your token is invalid or has expired. Please reset your password again.");
+				});
+			});
+		});
+
 		describe("with a valid token", () => {
 			beforeEach(() => {
-				// Mock the forgot password response
+				// Mock the reset password's validate token response
 				fetchMock.mock("/api/reset-password/validate-token/5555-5555", {
 					isValid: true,
 					token: {tokenhash: '5555-5555', completed: false, expires_at: '2030-12-26T00:00:00.000Z'},
