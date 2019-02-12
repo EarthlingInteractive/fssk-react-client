@@ -10,6 +10,20 @@ const validData = {
 	resetToken: "5555-5555",
 };
 
+const errorFieldsData = {
+	emailError: "invalid email",
+	nameError: "invalid name",
+	passwordError: "invalid password",
+	confirmPasswordError: "passwords do not match"
+}
+
+function setErrorFields(authStore: AuthStore) {
+	authStore.updateErrorField("emailError", errorFieldsData.emailError);
+	authStore.updateErrorField("nameError", errorFieldsData.nameError);
+	authStore.updateErrorField("passwordError", errorFieldsData.passwordError);
+	authStore.updateErrorField("confirmPasswordError", errorFieldsData.confirmPasswordError);
+}
+
 function setValidForgotData(authStore: AuthStore) {
 	authStore.updateField("email", validData.email);
 }
@@ -57,6 +71,27 @@ describe("AuthStore", () => {
 
 		});
 
+	});
+
+	describe("update error field", () => {
+		it("should correctly update all error fields", () => {
+			const authStore = new AuthStore();
+
+			setErrorFields(authStore);
+
+			expect(authStore.emailError).toEqual(errorFieldsData.emailError);
+			expect(authStore.nameError).toEqual(errorFieldsData.nameError);
+			expect(authStore.passwordError).toEqual(errorFieldsData.passwordError);
+			expect(authStore.confirmPasswordError).toEqual(errorFieldsData.confirmPasswordError);
+		});
+
+		it("should not allow changing regular fields directly", () => {
+			const authStore = new AuthStore();
+
+			authStore.updateErrorField("email", "nope nope");
+			expect(authStore.emailError).toEqual("");
+
+		});
 	});
 
 	describe("reset password validation", () => {
@@ -360,6 +395,18 @@ describe("AuthStore", () => {
 
 			return authStore.forgotPassword().then(() => {
 				expect(authStore.emailError.length).toBeGreaterThan(0);
+			});
+		});
+
+		it("should handle non-unique errors", () => {
+			fetchMock.post("*", {
+				status: 500,
+				headers: {"Content-Type":  "application/json"},
+				body: {},
+			});
+
+			return authStore.forgotPassword().then(() => {
+				expect(authStore.emailError).toEqual('An unknown error occured resetting email.');
 			});
 		});
 	});

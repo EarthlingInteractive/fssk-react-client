@@ -122,6 +122,15 @@ describe("fetchUtil", () => {
 			handleResponse(response as any);
 			expect(textResponseHandlerSpy).toHaveBeenCalled();
 		});
+
+		it("should call genericResponseHandler for a generic response", () => {
+			const responseSpy = spyOn(response.headers, "get");
+			responseSpy.and.returnValue("");
+
+			const genericResponseHandlerSpy = spyOn(handlers, "genericResponseHandler");
+			handleResponse(response as any);
+			expect(genericResponseHandlerSpy).toHaveBeenCalled();
+		});
 	});
 
 	describe("JSONResponseHandler", () => {

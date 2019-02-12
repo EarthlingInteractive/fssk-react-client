@@ -29,30 +29,18 @@ export class AuthStore {
 	private dataFields = ["email", "name", "password", "confirmPassword", "resetToken"];
 
 	@action.bound public updateField(field: string, val: string) {
-		switch (field) {
-			case "email":
-				this.email = val;
-				break;
+		if (this.dataFields.includes(field)) {
+			this[field] = val;
+		} else {
+			this.handleError(new Error(`Something tried to update a field named ${field} in the authorization store`));
+		}
+	}
 
-			case "name":
-				this.name = val;
-				break;
-
-			case "password":
-				this.password = val;
-				break;
-
-			case "confirmPassword":
-				this.confirmPassword = val;
-				break;
-
-			case "resetToken":
-				this.resetToken = val;
-				break;
-
-			default:
-				this.handleError(new Error(`Something tried to update a field named ${field} in the authorization store`));
-				return;
+	@action.bound public updateErrorField(field: string, val:string) {
+		if (this.errorFields.includes(field)) {
+			this[field] = val;
+		} else {
+			this.handleError(new Error(`Something tried to update an error field named ${field} in the authorization store`));
 		}
 	}
 
@@ -202,7 +190,10 @@ export class AuthStore {
 			this.clearAll();
 			return true;
 		} catch (error) {
-			this.handleError(error);
+			// If we weren't able to handle the error, then indicate that something unexpected 
+			if (!this.handleError(error)) {
+				this.updateErrorField('emailError', 'An unknown error occured resetting email.');
+			}
 			return false;
 		}
 	}
@@ -288,6 +279,12 @@ export class AuthStore {
 		return results;
 	}
 
+	/**
+	 * Attempts to parse an error message to set an email and password.
+	 * Returns true if we parsed the response.
+	 * @param error
+	 * @returns boolean true if the response was parsed and added to error fields
+	 */
 	@action.bound public parseServerErrorResponse(error: any) {
 		// for now the only error we really expect and can handle gracefully is a non-unique email
 		if (error.status === 401) {
@@ -295,14 +292,30 @@ export class AuthStore {
 			// but we only want the error message at the bottom (under password)
 			this.emailError = " ";
 			this.passwordError = "Incorrect email or password";
+			return true;
 		} else if (error.status === 500) {
-			if (error.json && error.json.message === "email is not unique") {
-				this.emailError = "A user already exists with this email";
+			// A flag to see if we recognize the error message
+			let parsedError = false;
+
+			if (error.json) {
+				switch(error.json.message) {
+					case 'Something went wrong when trying to send an email.':
+						this.updateErrorField("emailError", error.json.message);
+						parsedError = true;
+					break;
+					case "email is not unique":
+						this.updateErrorField("emailError", "A user already exists with this email");
+						parsedError = true;
+					break;
+					case "User does not exist":
+						this.updateErrorField("emailError", "No account matches the email address");
+						parsedError = true;
+					break;
+				}
 			}
-			if (error.json && error.json.message === "User does not exist") {
-				this.emailError = "No account matches the email address";
-			}
+			return parsedError;
 		}
+		return false;
 	}
 
 	public async loadSession() {
@@ -391,7 +404,7 @@ export class AuthStore {
 	private handleError(error: any) {
 		// @todo report this error, somehow...?
 		// console.error(error);
-		this.parseServerErrorResponse(error);
+		return this.parseServerErrorResponse(error);
 	}
 }
 
