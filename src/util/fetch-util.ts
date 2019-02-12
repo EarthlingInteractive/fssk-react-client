@@ -81,7 +81,7 @@ export const handlers = {
 			status: response.status,
 			statusText: response.statusText,
 		}));
-	}
+	},
 };
 
 export function handleResponse(response: Response) {

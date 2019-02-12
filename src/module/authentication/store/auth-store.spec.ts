@@ -14,8 +14,8 @@ const errorFieldsData = {
 	emailError: "invalid email",
 	nameError: "invalid name",
 	passwordError: "invalid password",
-	confirmPasswordError: "passwords do not match"
-}
+	confirmPasswordError: "passwords do not match",
+};
 
 function setErrorFields(authStore: AuthStore) {
 	authStore.updateErrorField("emailError", errorFieldsData.emailError);
@@ -406,7 +406,7 @@ describe("AuthStore", () => {
 			});
 
 			return authStore.forgotPassword().then(() => {
-				expect(authStore.emailError).toEqual('An unknown error occured resetting email.');
+				expect(authStore.emailError).toEqual("An unknown error occured resetting email.");
 			});
 		});
 	});

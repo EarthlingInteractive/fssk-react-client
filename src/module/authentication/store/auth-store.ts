@@ -36,7 +36,7 @@ export class AuthStore {
 		}
 	}
 
-	@action.bound public updateErrorField(field: string, val:string) {
+	@action.bound public updateErrorField(field: string, val: string) {
 		if (this.errorFields.includes(field)) {
 			this[field] = val;
 		} else {
@@ -190,9 +190,9 @@ export class AuthStore {
 			this.clearAll();
 			return true;
 		} catch (error) {
-			// If we weren't able to handle the error, then indicate that something unexpected 
+			// If we weren't able to handle the error, then indicate that something unexpected
 			if (!this.handleError(error)) {
-				this.updateErrorField('emailError', 'An unknown error occured resetting email.');
+				this.updateErrorField("emailError", "An unknown error occured resetting email.");
 			}
 			return false;
 		}
@@ -298,19 +298,19 @@ export class AuthStore {
 			let parsedError = false;
 
 			if (error.json) {
-				switch(error.json.message) {
+				switch (error.json.message) {
 					case 'Something went wrong when trying to send an email.':
 						this.updateErrorField("emailError", error.json.message);
 						parsedError = true;
-					break;
+						break;
 					case "email is not unique":
 						this.updateErrorField("emailError", "A user already exists with this email");
 						parsedError = true;
-					break;
+						break;
 					case "User does not exist":
 						this.updateErrorField("emailError", "No account matches the email address");
 						parsedError = true;
-					break;
+						break;
 				}
 			}
 			return parsedError;
