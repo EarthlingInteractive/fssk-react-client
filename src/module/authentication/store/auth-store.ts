@@ -299,7 +299,7 @@ export class AuthStore {
 
 			if (error.json) {
 				switch (error.json.message) {
-					case 'Something went wrong when trying to send an email.':
+					case "Something went wrong when trying to send an email.":
 						this.updateErrorField("emailError", error.json.message);
 						parsedError = true;
 						break;
