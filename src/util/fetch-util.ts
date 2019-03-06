@@ -72,6 +72,16 @@ export const handlers = {
 			statusText: response.statusText,
 		}));
 	},
+	genericResponseHandler(response: Response) {
+		if (response.ok) {
+			return response;
+		}
+		return Promise.reject(Object.assign({}, { // tslint:disable-line
+			statusCode: response.status,
+			status: response.status,
+			statusText: response.statusText,
+		}));
+	},
 };
 
 export function handleResponse(response: Response) {
@@ -81,7 +91,7 @@ export function handleResponse(response: Response) {
 	} else if (contentType.includes("text/html")) {
 		return handlers.textResponseHandler(response);
 	} else if (!contentType) {
-		return response;
+		return handlers.genericResponseHandler(response);
 	} else {
 		throw new Error(`Sorry, content-type ${contentType} not supported`);
 	}
