@@ -11,7 +11,7 @@ export default class AccountCreatedContainer extends React.Component<any> {
 		} = AuthStore;
 
 		const resendEmail = () => {
-
+			AuthStore.resendActivationEmail(email);
 		};
 
 		const props = {

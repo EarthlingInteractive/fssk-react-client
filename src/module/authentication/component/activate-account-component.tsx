@@ -33,7 +33,7 @@ export default class ActivateAccountComponent extends React.Component<IActivateA
 	public renderInvalidToken() {
 		return (
 			<div className="justify-content-center">
-				Your token is invalid or has expired. Please <a href="/register">register</a> again.
+				Your token is invalid or has expired.
 			</div>
 		);
 	}

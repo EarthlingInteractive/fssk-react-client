@@ -157,6 +157,21 @@ export class AuthStore {
 		}
 	}
 
+	@action.bound public async resendActivationEmail(email: string) {
+		try {
+			const response = await fetchUtil(`/api/users/resend-activation/${email}`, {
+				method: "GET",
+			});
+			if (response && response.user) {
+				return true;
+			}
+			return false;
+		} catch (error) {
+			this.handleError(error);
+			return false;
+		}
+	}
+
 	@action.bound public async activateUser(token: string) {
 		try {
 			const response = await fetchUtil(`/api/users/activate/${token}`, {
