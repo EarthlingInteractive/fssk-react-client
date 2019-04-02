@@ -18,14 +18,14 @@ class RegisterContainer extends React.Component<any> {
 		return register().then((success: boolean) => {
 			if (!success) { return; }
 
-			// Because the store fields get cleared after a succesful registration
+			// Because the store fields get cleared after a successful registration
 			// We update the store fields to what the user had when they registered
 			updateField("email", rememberUserCredentials.email);
 			updateField("password", rememberUserCredentials.password);
 
 			login().then((loginSuccess: boolean) => {
 				// Try logging them in, and go to the root site on success or fail
-				this.props.history.push("/");
+				this.props.history.push("/account-created");
 			});
 		});
 	}

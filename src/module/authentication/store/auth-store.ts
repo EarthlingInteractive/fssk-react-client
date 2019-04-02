@@ -60,7 +60,7 @@ export class AuthStore {
 			});
 
 			// clear the fields for the next time the user comes to this page
-			this.clearAll();
+			this.clearProperties(['name', 'password']);
 			return true;
 
 		} catch (error) {
@@ -151,6 +151,22 @@ export class AuthStore {
 				method: "POST",
 			});
 			return true;
+		} catch (error) {
+			this.handleError(error);
+			return false;
+		}
+	}
+
+	@action.bound public async activateUser(token: string) {
+		try {
+			const response = await fetchUtil(`/api/users/activate/${token}`, {
+				method: "GET",
+			});
+			if (response && response.isValid && response.user) {
+				this.updateVarsFromUser(response.user);
+				return true;
+			}
+			return false;
 		} catch (error) {
 			this.handleError(error);
 			return false;
