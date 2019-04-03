@@ -8,6 +8,7 @@ const logo = require("../../../img/logo.png"); // tslint:disable-line
 interface ILoginComponentProps {
 	submit: () => void;
 	updateField: (field: string, val: string) => void;
+	resendEmail: () => void;
 	email?: string;
 	emailError?: string;
 	name?: string;
@@ -16,6 +17,7 @@ interface ILoginComponentProps {
 	passwordError?: string;
 	confirmPassword?: string;
 	confirmPasswordError?: string;
+	activationError?: string;
 }
 
 @observer
@@ -24,6 +26,11 @@ export default class LoginComponent extends React.Component<ILoginComponentProps
 	constructor(props: ILoginComponentProps) {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
+		this.resendEmail = this.resendEmail.bind(this);
+	}
+
+	private resendEmail(e: any) {
+		this.props.resendEmail();
 	}
 
 	public render() {
@@ -33,12 +40,25 @@ export default class LoginComponent extends React.Component<ILoginComponentProps
 			emailError,
 			password,
 			passwordError,
+			activationError,
 		} = this.props;
 
 		const contentStyle = {
 				width: "25rem",
 				marginTop: "20px",
 		};
+
+		let activationErrorEl;
+		if (activationError) {
+			activationErrorEl = (
+				<div>
+					<p>{activationError}</p>
+					<button className="btn btn-primary" onClick={this.resendEmail}>
+						Resend Activation Email
+					</button>
+				</div>
+			);
+		}
 
 		return (
 			<div className="dsk-Admin-form login container d-flex justify-content-center">
@@ -90,6 +110,7 @@ export default class LoginComponent extends React.Component<ILoginComponentProps
 							Create an account here.
 						</Link>
 					</p>
+					{activationErrorEl}
 				</div>
 			</div>
 		);

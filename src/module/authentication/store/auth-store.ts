@@ -18,6 +18,7 @@ export class AuthStore {
 	@observable public nameError: string = "";
 	@observable public passwordError: string = "";
 	@observable public confirmPasswordError: string = "";
+	@observable public activationError: string = "";
 
 	@observable public user: any = null;
 	@observable public hasLoadedSession: boolean = false;
@@ -25,7 +26,7 @@ export class AuthStore {
 	// make the object indexable so [] notation works
 	[key: string]: any;
 
-	private errorFields = ["emailError", "nameError", "passwordError", "confirmPasswordError"];
+	private errorFields = ["emailError", "nameError", "passwordError", "confirmPasswordError", "activationError"];
 	private dataFields = ["email", "name", "password", "confirmPassword", "resetToken"];
 
 	@action.bound public updateField(field: string, val: string) {
@@ -162,7 +163,7 @@ export class AuthStore {
 			const response = await fetchUtil(`/api/users/resend-activation/${email}`, {
 				method: "GET",
 			});
-			if (response && response.user) {
+			if (response && response.id) {
 				return true;
 			}
 			return false;
@@ -340,6 +341,10 @@ export class AuthStore {
 						break;
 					case "User does not exist":
 						this.updateErrorField("emailError", "No account matches the email address");
+						parsedError = true;
+						break;
+					case "user not activated":
+						this.updateErrorField("activationError", "You can't log in yet. We previously sent an activation email to you at " + this.email + ". Please follow the instructions in that email to activate your account.");
 						parsedError = true;
 						break;
 				}

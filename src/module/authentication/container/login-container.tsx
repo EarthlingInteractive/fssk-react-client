@@ -13,6 +13,7 @@ export default class LoginContainer extends React.Component<any> {
 			password,
 			emailError,
 			passwordError,
+			activationError
 		} = AuthStore;
 
 		const submit = () => {
@@ -23,13 +24,24 @@ export default class LoginContainer extends React.Component<any> {
 			});
 		};
 
+		const resendEmail = () => {
+			AuthStore.resendActivationEmail(email)
+				.then((success) => {
+					if(!success) {
+						alert('Too many attempts to resend the activation email in a short period of time, please try again in 5 minutes');
+					}
+				})
+		};
+
 		const props = {
 			submit,
 			updateField,
+			resendEmail,
 			email,
 			password,
 			emailError,
 			passwordError,
+			activationError,
 		};
 		return (<LoginComponent {...props} />);
 	}
