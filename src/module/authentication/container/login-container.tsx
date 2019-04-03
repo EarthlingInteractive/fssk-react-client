@@ -19,7 +19,7 @@ export default class LoginContainer extends React.Component<any> {
 			login().then((success) => {
 				if (!success) { return; }
 				// @todo decide what this login success action should really be
-				this.props.history.push("/account-created");
+				this.props.history.push("/");
 			});
 		};
 

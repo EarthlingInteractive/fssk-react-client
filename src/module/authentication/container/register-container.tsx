@@ -10,7 +10,7 @@ class RegisterContainer extends React.Component<any> {
 
 	@autobind
 	public async submit() {
-		const { email, password, register, login, updateField } = AuthStore;
+		const { email, password, register, updateField } = AuthStore;
 		const rememberUserCredentials = {
 			email, password,
 		};
@@ -23,10 +23,7 @@ class RegisterContainer extends React.Component<any> {
 			updateField("email", rememberUserCredentials.email);
 			updateField("password", rememberUserCredentials.password);
 
-			login().then((loginSuccess: boolean) => {
-				// Try logging them in, and go to the root site on success or fail
-				this.props.history.push("/account-created");
-			});
+			this.props.history.push("/account-created");
 		});
 	}
 

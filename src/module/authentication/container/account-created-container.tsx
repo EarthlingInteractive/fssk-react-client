@@ -11,7 +11,12 @@ export default class AccountCreatedContainer extends React.Component<any> {
 		} = AuthStore;
 
 		const resendEmail = () => {
-			AuthStore.resendActivationEmail(email);
+			AuthStore.resendActivationEmail(email)
+				.then((success) => {
+					if(!success) {
+						alert('Too many attempts to resend the activation email in a short period of time, please try again in 5 minutes');
+					}
+				})
 		};
 
 		const props = {

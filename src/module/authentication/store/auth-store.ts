@@ -223,7 +223,7 @@ export class AuthStore {
 		} catch (error) {
 			// If we weren't able to handle the error, then indicate that something unexpected
 			if (!this.handleError(error)) {
-				this.updateErrorField("emailError", "An unknown error occured resetting email.");
+				this.updateErrorField("emailError", "An unknown error occurred resetting email.");
 			}
 			return false;
 		}

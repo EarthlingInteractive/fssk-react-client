@@ -17,7 +17,7 @@ class ActivateAccountContainer extends React.Component<any, State> {
 
 		if (params && params.token) {
 			activateUser(params.token)
-				.then((validToken) => {
+				.then((validToken: boolean) => {
 					this.setState({ isLoading: false, validToken });
 				});
 		}

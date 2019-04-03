@@ -9,6 +9,8 @@ interface IAccountCreatedComponentProps {
 @observer
 export default class AccountCreatedComponent extends React.Component<IAccountCreatedComponentProps> {
 
+	static defaultProps = { email: 'your email' };
+
 	constructor(props: IAccountCreatedComponentProps) {
 		super(props);
 		this.resendEmail = this.resendEmail.bind(this);
@@ -21,7 +23,7 @@ export default class AccountCreatedComponent extends React.Component<IAccountCre
 	public render() {
 		const {email} = this.props;
 		return (
-			<div className="d-flex justify-content-center">
+			<div className="container">
 				<p>You're almost done! We sent an activation mail to {email}. Please follow the instructions in the mail to activate your account.</p>
 				<p>If it doesn't arrive, check your spam folder.</p>
 				<button className="btn btn-primary" onClick={this.resendEmail}>
@@ -30,6 +32,4 @@ export default class AccountCreatedComponent extends React.Component<IAccountCre
 			</div>
 		);
 	}
-
-	static defaultProps = { email: 'your email' };
 }

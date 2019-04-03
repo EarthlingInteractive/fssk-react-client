@@ -23,8 +23,8 @@ export default class ActivateAccountComponent extends React.Component<IActivateA
 
 	public renderLoading() {
 		return (
-			<div className="justify-content-center">
-				<p>Validating token</p>
+			<div>
+				<p>Validating token...</p>
 			</div>
 		);
 	}
@@ -32,8 +32,9 @@ export default class ActivateAccountComponent extends React.Component<IActivateA
 
 	public renderInvalidToken() {
 		return (
-			<div className="justify-content-center">
-				Your token is invalid or has expired.
+			<div>
+				<p>Your token is invalid or has expired.</p>
+				<a href="/" className="btn btn-default">Return to Log in</a>
 			</div>
 		);
 	}
