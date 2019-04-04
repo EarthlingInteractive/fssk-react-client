@@ -406,7 +406,7 @@ describe("AuthStore", () => {
 			});
 
 			return authStore.forgotPassword().then(() => {
-				expect(authStore.emailError).toEqual("An unknown error occured resetting email.");
+				expect(authStore.emailError).toEqual("An unknown error occurred resetting email.");
 			});
 		});
 	});
