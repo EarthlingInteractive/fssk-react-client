@@ -25,12 +25,7 @@ export default class LoginContainer extends React.Component<any> {
 		};
 
 		const resendEmail = () => {
-			AuthStore.resendActivationEmail(email)
-				.then((success) => {
-					if(!success) {
-						alert('Too many attempts to resend the activation email in a short period of time, please try again in 5 minutes');
-					}
-				})
+			AuthStore.resendActivationEmailWithAlert(email);
 		};
 
 		const props = {
