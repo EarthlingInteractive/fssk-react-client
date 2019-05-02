@@ -158,7 +158,7 @@ export class AuthStore {
 		}
 	}
 
-	@action.bound public async resendActivationEmail(email: string) {
+	@action.bound public async resendActivationEmail(email: string): Promise<boolean> {
 		try {
 			const response = await fetchUtil(`/api/users/resend-activation/${email}`, {
 				method: "GET",
@@ -171,6 +171,14 @@ export class AuthStore {
 			this.handleError(error);
 			return false;
 		}
+	}
+
+	public async resendActivationEmailWithAlert (email: string): Promise<boolean> {
+		const success = await this.resendActivationEmail(email);
+		if (!success) {
+			alert('Too many attempts to resend the activation email in a short period of time, please try again in 5 minutes');
+		}
+		return success;
 	}
 
 	@action.bound public async activateUser(token: string) {
@@ -345,6 +353,10 @@ export class AuthStore {
 						break;
 					case "user not activated":
 						this.updateErrorField("activationError", "You can't log in yet. We previously sent an activation email to you at " + this.email + ". Please follow the instructions in that email to activate your account.");
+						parsedError = true;
+						break;
+					default:
+						this.updateErrorField("passwordError", "Log in failed.");
 						parsedError = true;
 						break;
 				}
