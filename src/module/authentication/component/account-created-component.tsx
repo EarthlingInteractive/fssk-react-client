@@ -26,9 +26,11 @@ export default class AccountCreatedComponent extends React.Component<IAccountCre
 			<div className="container">
 				<p>You're almost done! We sent an activation mail to {email}. Please follow the instructions in the mail to activate your account.</p>
 				<p>If it doesn't arrive, check your spam folder.</p>
-				<button className="btn btn-primary" onClick={this.resendEmail}>
+				<a href="/" className="btn btn-primary mr-1">Return to Log in</a>
+				<button className="btn btn-secondary" onClick={this.resendEmail}>
 					Resend Activation Email
 				</button>
+
 			</div>
 		);
 	}
