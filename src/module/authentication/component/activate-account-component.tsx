@@ -44,9 +44,9 @@ export default class ActivateAccountComponent extends React.Component<IActivateA
 		let componentContents;
 		if (this.props.isLoading) {
 			componentContents = this.renderLoading();
-		} else if(this.props.validToken === true) {
+		} else if (this.props.validToken === true) {
 			componentContents = this.renderActivationSuccessful();
-		} else if(this.props.validToken === false) {
+		} else if (this.props.validToken === false) {
 			componentContents = this.renderInvalidToken();
 		}
 

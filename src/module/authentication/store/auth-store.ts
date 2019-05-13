@@ -61,7 +61,7 @@ export class AuthStore {
 			});
 
 			// clear the fields for the next time the user comes to this page
-			this.clearProperties(['name', 'password']);
+			this.clearProperties(["name", "password"]);
 			return true;
 
 		} catch (error) {
@@ -173,10 +173,10 @@ export class AuthStore {
 		}
 	}
 
-	public async resendActivationEmailWithAlert (email: string): Promise<boolean> {
+	public async resendActivationEmailWithAlert(email: string): Promise<boolean> {
 		const success = await this.resendActivationEmail(email);
 		if (!success) {
-			alert('Too many attempts to resend the activation email in a short period of time, please try again in 5 minutes');
+			alert("Too many attempts to resend the activation email in a short period of time, please try again in 5 minutes");
 		}
 		return success;
 	}
@@ -352,7 +352,9 @@ export class AuthStore {
 						parsedError = true;
 						break;
 					case "user not activated":
-						this.updateErrorField("activationError", "You can't log in yet. We previously sent an activation email to you at " + this.email + ". Please follow the instructions in that email to activate your account.");
+						this.updateErrorField("activationError",
+							"You can't log in yet. We previously sent an activation email to you at " + this.email +
+							". Please follow the instructions in that email to activate your account.");
 						parsedError = true;
 						break;
 					default:

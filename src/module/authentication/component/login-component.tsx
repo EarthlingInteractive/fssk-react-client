@@ -29,10 +29,6 @@ export default class LoginComponent extends React.Component<ILoginComponentProps
 		this.resendEmail = this.resendEmail.bind(this);
 	}
 
-	private resendEmail(e: any) {
-		this.props.resendEmail();
-	}
-
 	public render() {
 		const {
 			updateField,
@@ -114,6 +110,10 @@ export default class LoginComponent extends React.Component<ILoginComponentProps
 				</div>
 			</div>
 		);
+	}
+
+	private resendEmail(e: any) {
+		this.props.resendEmail();
 	}
 
 	private onSubmit(e: any) {

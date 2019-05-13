@@ -9,7 +9,7 @@ type State = Readonly<typeof initialState>;
 
 @observer
 class ActivateAccountContainer extends React.Component<any, State> {
-	state = initialState;
+	public state = initialState;
 
 	public componentDidMount() {
 		const { activateUser } = AuthStore;
@@ -26,7 +26,7 @@ class ActivateAccountContainer extends React.Component<any, State> {
 	public render() {
 		const props = {
 			validToken: this.state.validToken,
-			isLoading: this.state.isLoading
+			isLoading: this.state.isLoading,
 		};
 
 		return (<ActivateAccountComponent {...props} />);

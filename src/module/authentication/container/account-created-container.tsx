@@ -7,7 +7,7 @@ import AuthStore from "../store/auth-store";
 export default class AccountCreatedContainer extends React.Component<any> {
 	public render() {
 		const {
-			email
+			email,
 		} = AuthStore;
 
 		const resendEmail = () => {

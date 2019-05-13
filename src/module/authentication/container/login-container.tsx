@@ -13,7 +13,7 @@ export default class LoginContainer extends React.Component<any> {
 			password,
 			emailError,
 			passwordError,
-			activationError
+			activationError,
 		} = AuthStore;
 
 		const submit = () => {

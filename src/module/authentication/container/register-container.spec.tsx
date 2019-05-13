@@ -129,7 +129,7 @@ describe("RegisterContainer", () => {
 
 			// Should be called two times, once for registration and again for logging in
 			expect(fetchSpy).toHaveBeenCalledTimes(1);
-			
+
 		});
 	});
 });
