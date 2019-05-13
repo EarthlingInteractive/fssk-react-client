@@ -18,6 +18,7 @@ export class AuthStore {
 	@observable public nameError: string = "";
 	@observable public passwordError: string = "";
 	@observable public confirmPasswordError: string = "";
+	@observable public activationError: string = "";
 
 	@observable public user: any = null;
 	@observable public hasLoadedSession: boolean = false;
@@ -25,7 +26,7 @@ export class AuthStore {
 	// make the object indexable so [] notation works
 	[key: string]: any;
 
-	private errorFields = ["emailError", "nameError", "passwordError", "confirmPasswordError"];
+	private errorFields = ["emailError", "nameError", "passwordError", "confirmPasswordError", "activationError"];
 	private dataFields = ["email", "name", "password", "confirmPassword", "resetToken"];
 
 	@action.bound public updateField(field: string, val: string) {
@@ -60,7 +61,7 @@ export class AuthStore {
 			});
 
 			// clear the fields for the next time the user comes to this page
-			this.clearAll();
+			this.clearProperties(['name', 'password']);
 			return true;
 
 		} catch (error) {
@@ -157,6 +158,45 @@ export class AuthStore {
 		}
 	}
 
+	@action.bound public async resendActivationEmail(email: string): Promise<boolean> {
+		try {
+			const response = await fetchUtil(`/api/users/resend-activation/${email}`, {
+				method: "GET",
+			});
+			if (response && response.id) {
+				return true;
+			}
+			return false;
+		} catch (error) {
+			this.handleError(error);
+			return false;
+		}
+	}
+
+	public async resendActivationEmailWithAlert (email: string): Promise<boolean> {
+		const success = await this.resendActivationEmail(email);
+		if (!success) {
+			alert('Too many attempts to resend the activation email in a short period of time, please try again in 5 minutes');
+		}
+		return success;
+	}
+
+	@action.bound public async activateUser(token: string) {
+		try {
+			const response = await fetchUtil(`/api/users/activate/${token}`, {
+				method: "GET",
+			});
+			if (response && response.isValid && response.user) {
+				this.updateVarsFromUser(response.user);
+				return true;
+			}
+			return false;
+		} catch (error) {
+			this.handleError(error);
+			return false;
+		}
+	}
+
 	@action.bound public async verifyResetToken(token: string) {
 		try {
 			const response = await fetchUtil(`/api/reset-password/validate-token/${token}`, {
@@ -192,7 +232,7 @@ export class AuthStore {
 		} catch (error) {
 			// If we weren't able to handle the error, then indicate that something unexpected
 			if (!this.handleError(error)) {
-				this.updateErrorField("emailError", "An unknown error occured resetting email.");
+				this.updateErrorField("emailError", "An unknown error occurred resetting email.");
 			}
 			return false;
 		}
@@ -309,6 +349,14 @@ export class AuthStore {
 						break;
 					case "User does not exist":
 						this.updateErrorField("emailError", "No account matches the email address");
+						parsedError = true;
+						break;
+					case "user not activated":
+						this.updateErrorField("activationError", "You can't log in yet. We previously sent an activation email to you at " + this.email + ". Please follow the instructions in that email to activate your account.");
+						parsedError = true;
+						break;
+					default:
+						this.updateErrorField("passwordError", "Log in failed.");
 						parsedError = true;
 						break;
 				}

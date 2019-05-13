@@ -128,16 +128,8 @@ describe("RegisterContainer", () => {
 			await submitForm(wrapper);
 
 			// Should be called two times, once for registration and again for logging in
-			expect(fetchSpy).toHaveBeenCalledTimes(2);
-
-			// Expect the login api call with the registration content we entered
-			expect(fetchSpy).toHaveBeenCalledWith("/api/auth", {
-				body: {
-					email: validData.email,
-					password: validData.password,
-				},
-				method: "POST",
-			});
+			expect(fetchSpy).toHaveBeenCalledTimes(1);
+			
 		});
 	});
 });

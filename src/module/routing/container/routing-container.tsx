@@ -8,7 +8,8 @@ import TodoContainer from "../../todo/container/todo-container";
 import ProtectedRouteContainer from "./protected-route-container";
 import ForgotPasswordContainer from "../../authentication/container/forgot-password-container";
 import ResetPasswordContainer from "../../authentication/container/reset-password-container";
-
+import AccountCreatedContainer from "../../authentication/container/account-created-container";
+import ActivateAccountContainer from "../../authentication/container/activate-account-container";
 
 export default class RoutingContainer extends React.Component<any> {
 	public render() {
@@ -18,6 +19,8 @@ export default class RoutingContainer extends React.Component<any> {
 					<Switch>
 						<Route exact path="/login" component={LoginContainer} />
 						<Route exact path="/register" component={RegisterContainer} />
+						<Route exact path="/account-created" component={AccountCreatedContainer} />
+						<Route exact path="/activate-account/:token" component={ActivateAccountContainer} />
 						<Route exact path="/forgot-password" component={ForgotPasswordContainer} />
 						<Route exact path="/reset-password/:token" component={ResetPasswordContainer} />
 						<ProtectedRouteContainer exact path="/" component={TodoContainer} />
