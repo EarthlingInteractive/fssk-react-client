@@ -227,10 +227,11 @@ export class AuthStore {
 				},
 				method: "POST",
 			});
+
 			this.clearAll();
 			return true;
 		} catch (error) {
-			// If we weren't able to handle the error, then indicate that something unexpected
+			// If we weren't able to handle the error, then indicate that something unexpected happened
 			if (!this.handleError(error)) {
 				this.updateErrorField("emailError", "An unknown error occurred resetting email.");
 			}
@@ -261,7 +262,9 @@ export class AuthStore {
 
 			return true;
 		} catch (error) {
-			this.handleError(error);
+			if (!this.handleError(error)) {
+				this.updateErrorField("passwordError", "Log in failed.");
+			}
 			return false;
 		}
 	}
@@ -358,8 +361,6 @@ export class AuthStore {
 						parsedError = true;
 						break;
 					default:
-						this.updateErrorField("passwordError", "Log in failed.");
-						parsedError = true;
 						break;
 				}
 			}
