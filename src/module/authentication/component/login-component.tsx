@@ -63,7 +63,7 @@ export default class LoginComponent extends React.Component<ILoginComponentProps
 						Application Log In!
 					</div>
 					<div className="d-flex justify-content-center">
-						<img src={logo} />
+						<img src={logo} alt="Application Logo" />
 					</div>
 					<form onSubmit={this.onSubmit}>
 

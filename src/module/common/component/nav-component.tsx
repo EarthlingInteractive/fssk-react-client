@@ -10,7 +10,8 @@ export default class NavComponent extends React.Component<any> {
 
 	public render() {
 		return (
-			<nav className="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+			<nav className="navbar navbar-toggleable-md fixed-top navbar-expand-md navbar-light bg-light">
+				<a className="navbar-brand" href="/">Full Stack Starter Kit!</a>
 				<button
 					className="navbar-toggler navbar-toggler-right hidden-lg-up"
 					type="button"
@@ -22,15 +23,14 @@ export default class NavComponent extends React.Component<any> {
 				>
 					<span className="navbar-toggler-icon" />
 				</button>
-				<a className="navbar-brand" href="#">Full Stack Starter Kit!</a>
 
-				<div className="navbar-collapse" id="navbarsExampleDefault">
+				<div className="collapse navbar-collapse" id="navbarsExampleDefault">
 					<ul className="navbar-nav mr-auto">
 						<li className="nav-item active">
-							<a className="nav-link" href="#">To-do List<span className="sr-only">(current)</span></a>
+							<a className="nav-link" href="/">To-do List<span className="sr-only">(current)</span></a>
 						</li>
 						<li className="nav-item">
-							<a className="nav-link" href="#">Settings</a>
+							<a className="nav-link" href="/">Settings</a>
 						</li>
 					</ul>
 					<form className="form-inline mt-2 mt-md-0">

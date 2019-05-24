@@ -49,7 +49,7 @@ export default class TodoItemComponent extends React.Component<ITodoItemComponen
 	private renderTodoForm() {
 		return (
 			<form className="form-row" onSubmit={this.submitTodoForm}>
-				<div className="col-10">
+				<div className="col-md-10">
 					<FormInput
 						inputClass="form-control"
 						type="text"
@@ -60,14 +60,14 @@ export default class TodoItemComponent extends React.Component<ITodoItemComponen
 						onChange={this.props.updateField(this.props.todoIndex)}
 					/>
 				</div>
-				<div className="col-1">
+				<div className="col-md-1 col-6 text-center">
 					<button
 						className="btn btn-primary btn-sm"
 						type="submit"
 					>Save
 					</button>
 				</div>
-				<div className="col-1">
+				<div className="col-md-1 col-6 text-center">
 					<button
 						className="btn btn-outline-secondary btn-sm"
 						onClick={this.cancelUpdateTodo}
@@ -81,7 +81,7 @@ export default class TodoItemComponent extends React.Component<ITodoItemComponen
 	private renderTodoItem() {
 		return (
 			<div className="form-row">
-				<div className="col-10">
+				<div className="col-md-10">
 					<div className="form-check">
 						<input
 							className="form-check-input"
@@ -95,14 +95,14 @@ export default class TodoItemComponent extends React.Component<ITodoItemComponen
 						</label>
 					</div>
 				</div>
-				<div className="col-1">
+				<div className="col-md-1 col-6 text-center">
 					<button
 						className="btn btn-outline-primary btn-sm"
 						onClick={this.enableEditing}
 					>Update
 					</button>
 				</div>
-				<div className="col-1">
+				<div className="col-md-1 col-6 text-center">
 					<button
 						className="btn btn-link btn-sm"
 						onClick={this.deleteTodo}

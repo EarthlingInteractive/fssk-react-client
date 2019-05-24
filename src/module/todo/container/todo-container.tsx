@@ -25,16 +25,13 @@ export default class TodoContainer extends React.Component<any> {
 		};
 
 		const cardStyle = {
-				width: "50rem",
 				marginTop: "80px",
-				marginRight: "auto",
-				marginLeft: "auto",
-				zIndex: 1040,
 		};
 
 		return (
+			<div>
+			<NavComponent history={this.props.history} />
 			<div className="container">
-				<NavComponent history={this.props.history} />
 					<div className="card" style={cardStyle}>
 						<h2 className="card-header">To-Do List</h2>
 						<ul className="list-group list-group-flush">
@@ -52,6 +49,7 @@ export default class TodoContainer extends React.Component<any> {
 							<li className="list-group-item"><button className="btn btn-success" onClick={this.addTodo}>+</button></li>
 						</ul>
 					</div>
+			</div>
 			</div>
 		);
 	}
@@ -75,7 +73,7 @@ export default class TodoContainer extends React.Component<any> {
 		// component. We may reuse the todo component in another place and not want
 		// a speedbump to confirm deletion.  This way we can include any usage specific
 		// behavior here, before accessing the store.
-		if (confirm("Delete this item?")) {
+		if (window.confirm("Delete this item?")) {
 			TodoStore.saveAndDeleteTodo(todo);
 		}
 	}
