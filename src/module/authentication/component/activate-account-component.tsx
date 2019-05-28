@@ -8,9 +8,6 @@ interface IActivateAccountComponentProps {
 
 @observer
 export default class ActivateAccountComponent extends React.Component<IActivateAccountComponentProps> {
-	constructor(props: IActivateAccountComponentProps) {
-		super(props);
-	}
 
 	public renderActivationSuccessful()  {
 		return (
