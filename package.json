@@ -32,7 +32,7 @@
     "react-scripts": "2.1.8",
     "reactstrap": "6.3.1",
     "typescript": "3.3.3333",
-    "validator": "10.4.0",
+    "validator": "13.7.0",
     "wait-for-expect": "1.0.1"
   },
   "devDependencies": {
